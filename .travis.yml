@@ -7,6 +7,10 @@ jobs:
     name: "Linux and OSX images"
     os:
       - linux
+        addons:
+          apt:
+            packages:
+              - g++-4.8
       - osx
     node_js:
       - "node"
