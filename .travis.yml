@@ -1,30 +1,21 @@
 language: node_js
 env:
   - LINUX_CXX=g++-4.8
-jobs:
-  include:
-  - stage: "Linux and OSX images"
-    name: "Linux and OSX images"
-    os:
-      - linux
-        addons:
-          apt:
-            packages:
-              - g++-4.8
-      - osx
-    node_js:
-      - "node"
-      - "12"
-      - "10"
-      - "8"
-    before_install:
-      - echo Building for Node $TRAVIS_NODE_VERSION
-      - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=$LINUX_CXX; $CXX --version; fi;
-      - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then c++ --version; fi;
-    install: true
-    before_script:
-      - npm install
-    script:
-      - npm run build:ts
-      - npm run build
-      - npm test
+os: linux
+dist: trusty
+node_js:
+  - "node"
+  - "12"
+  - "10"
+  - "8"
+before_install:
+  - echo Building for Node $TRAVIS_NODE_VERSION
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=$LINUX_CXX; $CXX --version; fi;
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then c++ --version; fi;
+install: true
+before_script:
+  - npm install
+script:
+  - npm run build:ts
+  - npm run build
+  - npm test
