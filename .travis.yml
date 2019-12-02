@@ -1,10 +1,11 @@
 language: node_js
 env:
   - LINUX_CXX=g++-4.8
-os: linux
-dist: trusty
+os:
+  - linux
+  - osx
 node_js:
-  - "node:alpine"
+  - "node"
   - "12"
   - "10"
   - "8"
@@ -19,3 +20,7 @@ script:
   - npm run build:ts
   - npm run build
   - npm test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build --build-args VERSION=$TRAVIS_NODE_VERSION -t tmp/alpine-native-metrics .; fi;
+after_success:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run tmp/alpine-native-metrics -e NODE_PRE_GYP_GITHUB_TOKEN; fi;
+  - echo "Publishing"; npm install node-pre-gyp-github@1.4.3; ./node_modules/.bin/node-pre-gyp configure; ./node_modules/.bin/node-pre-gyp build; ./node_modules/.bin/node-pre-gyp package; ./node_modules/.bin/node-pre-gyp-github publish;
